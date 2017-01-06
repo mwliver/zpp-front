@@ -29,14 +29,50 @@ Ext.define("PLAN.view.PLAN_VIEWPORT", {
             if (!itemData.config) {
                 return
             }
+
             switch (itemData.config.type) {
                 case 'pulpit':
+                    PLAN.utils.Router.open({
+                        formName: "PLAN_DASHBOARD",
+                        contextForm: true
+                    })
+                    break
                 case 'dodNau':
+                    PLAN.utils.Router.open({
+                        formName: "PLAN_DODNAU",
+                        contextForm: true
+                    })
+                    break
                 case 'dodZaj':
+                    PLAN.utils.Router.open({
+                        formName: "PLAN_DODZAJ",
+                        contextForm: true
+                    })
+                    break
                 case 'dodGru':
+                    PLAN.utils.Router.open({
+                        formName: "PLAN_DODGRU",
+                        contextForm: true
+                    })
+                    break
                 case 'lisUzy':
+                    PLAN.utils.Router.open({
+                        formName: "PLAN_LISUZY",
+                        contextForm: true
+                    })
+                    break
                 case 'wiadom':
+                    PLAN.utils.Router.open({
+                        formName: "PLAN_WIADOM",
+                        contextForm: true
+                    })
+                    break
                 case 'profil':
+                    PLAN.utils.Router.open({
+                        formName: "PLAN_PROFIL",
+                        contextForm: true
+                    })
+                    break
             }
         }
 
