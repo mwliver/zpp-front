@@ -41,5 +41,24 @@ Ext.define("PLAN.utils.Helpers", {
         } else {
             return true;
         }
+    },
+    /**
+     * Funkcja czyszcząca ze 'śmieci' dane ze store
+     * 
+     * @param Object[] storeData 
+     */
+    cleanStoreData: function (storeData) {
+        var cleanedDataArr = []
+        var i
+
+        if (!storeData) {
+            return
+        }
+
+        for (i = 0; i < storeData.items.length; i++) {
+            cleanedDataArr.push(storeData.items[i].data)
+        }
+
+        return cleanedDataArr
     }
 });

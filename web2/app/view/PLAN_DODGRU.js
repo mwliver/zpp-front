@@ -10,13 +10,13 @@ Ext.define("PLAN.view.PLAN_DODGRU", {
     initComponent: function (){
         var PLAN_DODGRU = this;
 
-        PLAN_DODGRU.dodawanieNauczyciela = Ext.create({
+        PLAN_DODGRU.dodawanieGrup = Ext.create({
             xtype: "panel",
             title: "TODO - dodawanie grup",
             flex: 100
         });
 
-        PLAN_DODGRU.items = [PLAN_DODGRU.dodawanieNauczyciela];
+        PLAN_DODGRU.items = [PLAN_DODGRU.dodawanieGrup];
 
         PLAN_DODGRU.callParent(arguments);
     }

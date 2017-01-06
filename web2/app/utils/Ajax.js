@@ -6,7 +6,7 @@ Ext.define("PLAN.utils.Ajax", {
     /**
      * Główna ścieżka do API, do niej doklejane będzie reszta url-a
      */
-    apiPath: "https://", // TODO jak wrzucimy na serwer
+    apiPath: "http://localhost:8080", // TODO jak wrzucimy na serwer
     /**
      * [function description]
      * @param Object requestParams parametry otwieranej formatki
