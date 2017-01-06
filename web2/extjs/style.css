@@ -1,0 +1,151 @@
+.PLAN-topbar-login .x-panel-header-default {
+    background-color: #0a2447;
+}
+.x-panel-header-title-default > .x-title-text-default {
+    padding-bottom: 7px
+}
+.PLAN-topbar-login .x-panel-header-title-default {
+    font-weight: bold;
+    font-size: 20px;
+    background-image: url(public/startBG.jpg) !important;
+    background-repeat: no-repeat
+}
+.PLAN-bottombar-login .x-panel-body-default {
+    background-color: #0a2447;
+    font-weight: bold;
+    font-size: 18px
+}
+.PLAN-topbar-login .x-panel-body-default {
+    font-size: 30px;
+    font-weight: bold
+}
+.PLAN-welcome .x-panel-body-default {
+    color: rgb(16, 58, 111)
+}
+.x-form-item-label-default {
+    color: #626b78;
+    font-weight: bold
+}
+.x-form-text-default {
+    font-size: 10px;
+    color: #626b78;
+    font-weight: bold
+}
+.x-form-display-field-default {
+    color: aliceblue
+}
+.PLAN-register-btn.x-btn-over.x-btn-default-large {
+    background-image: linear-gradient(rgb(246, 95, 5) 0%, rgb(239, 119, 1) 100%);
+    border: 0px;
+}
+.PLAN-register-btn.x-btn-default-large {
+    background-image: linear-gradient(rgb(239, 119, 1) 0%, rgb(246, 95, 5) 100%);
+    border: 0px
+}
+.PLAN-login-btn.x-btn-default-large {
+    background-image: linear-gradient(rgb(61, 126, 195) 0%, rgb(55, 111, 169) 100%);
+    border: 0px
+}
+.PLAN-login-btn.x-btn-over.x-btn-default-large {
+    background-image: linear-gradient(rgb(55, 111, 169) 0%, rgb(61, 126, 195) 100%);
+    border: 0px
+}
+.PLAN-panel-recaptcha.x-panel-default {
+    padding-left: 35px
+}
+.PLAN-top-menu-item-panel .x-panel-header-default {
+    background-color: #06276F;
+    color: white
+}
+.PLAN-top-menu-item-panel .x-panel-body-default {
+    background-color: #0B5fa5;
+}
+.PLAN-menu-item-panel .x-panel-header-default {
+    background-color: #0B5fa5;
+    border: 0;
+    border-bottom-color: #0B5fa5;
+    border-top-color: #0B5fa5;
+    border-left-color: #0B5fa5;
+    border-right-color: #0B5fa5;
+    color: white
+}
+.PLAN-menu-item-panel-over .x-panel-header-default {
+    background-color: #3f8fd2;
+    border: 0;
+    color: white
+}
+.img-circle {
+    border-radius: 50%;
+    height: auto;
+    width: auto;
+    max-width: 40px;
+    max-height: 40px;
+}
+.x-treelist-navigation .x-treelist-item-text {
+    color: #adb3b8;
+    margin-left: 50px;
+    margin-right: 24px;
+    font-size: 14px;
+    line-height: 64px;
+}
+.x-treelist-item, .x-treelist-container, .x-treelist-root-container {
+    background-color: rgb(60, 74, 87);
+    color: white;
+    font-size: 14px;
+}
+.x-treelist-navigation .x-treelist-item-expander {
+    color: white
+}
+.x-treelist-row:hover {
+    background-color: rgb(71, 83, 96);
+}
+.x-treelist-row:hover > * > .x-treelist-item-expander {
+    color: #d6d9dc;
+}
+.x-treelist-item-text:hover {
+    color: white
+}
+.x-treelist-item-text {
+    font-family: verdana, sans-serif;
+    color: #adb3b8;
+    font-size: 14px;
+}
+.x-treelist-row {
+    padding-top: 15px;
+    padding-bottom: 15px
+}
+.x-treelist-item-icon, .x-treelist-item-tool {
+    font-family: FontAwesome;
+    color: #acacac;
+    .x-tab-over & {
+        color: #c4c4c4;
+    }
+    .x-tab-active & {
+        color: #fff;
+    }
+}
+.x-treelist-item-selected > .x-treelist-row {
+    background-color: rgb(71, 83, 96);
+}
+.x-treelist-item-selected:hover > .x-treelist-row {
+    background-color: rgb(71, 83, 96);
+}
+.x-treelist-row:hover > * > .x-treelist-item-icon {
+    color: white;
+}
+.x-treelist-row:hover > * > .x-treelist-item-text {
+    color: white;
+}
+.x-treelist-item-expander {
+    color: #c4c4c4;
+}
+.PLAN-menu-panel .x-panel-body-default {
+    background-color: rgb(60, 74, 87)
+}
+.x-panel-header-title-navigation > .x-title-text-navigation:after {
+    top: 30px;
+    right: -24px;
+}
+.PLAN-cursor-pointer {
+    cursor: pointer;
+}
