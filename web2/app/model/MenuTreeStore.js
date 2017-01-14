@@ -19,6 +19,14 @@ Ext.define("PLAN.model.MenuTreeStore", {
                     },
                     leaf: true,
                     height: 60
+                },{
+                    text: "Plan",
+                    iconCls: "fa fa-calendar",
+                    config: {
+                        type: 'plan'
+                    },
+                    leaf: true,
+                    height: 60
                 }, {
                     text: "Admin",
                     iconCls: "fa fa-book",
