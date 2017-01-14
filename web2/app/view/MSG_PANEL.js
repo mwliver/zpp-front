@@ -8,7 +8,7 @@ Ext.define("PLAN.view.MSG_PANEL", {
     cls: "PLAN-menu-item-panel",
     flex: 100,
     initComponent: function (){
-        var MSG_PANEL = this;
+        var MSG_PANEL = this;   
 
         MSG_PANEL.dashBoard = Ext.create({
             xtype: "panel",
