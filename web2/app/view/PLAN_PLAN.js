@@ -3,7 +3,7 @@ Ext.define("PLAN.view.PLAN_PLAN", {
     extend: "Ext.form.Panel",
     layout: {
         type: 'vbox',
-        aign: 'stretch'
+        align: 'stretch'
     },
     flex: 100,
     scrollable: true,
@@ -12,57 +12,113 @@ Ext.define("PLAN.view.PLAN_PLAN", {
 
         me.leftPanel = Ext.create({
             xtype: 'panel',
-            title: 'left',
             layout: {
                 type: 'vbox',
                 align: 'stretch'
             },
-            flex: 100,
-            // items: (function () {
-            //     var i
-            //     var hoursArr = []
+            scrollable: true,
+            width: 150,
+            items: (function () {
+                var i
+                var hoursArr = []
 
-            //     for (i = 0; i < 14; i++) {
-            //         hoursArr.push({
-            //             xtype: 'panel',
-            //             width: 150,
-            //             height: 200,
-            //             title: 'test'
-            //         })
-            //     }
-            //     return hoursArr
-            // })()
+                for (i = 1; i < 15; i++) {
+                    hoursArr.push({
+                        xtype: 'panel',
+                        layout: 'fit',
+                        width: 50,
+                        height: 100,
+                        items: [{
+                            xtype: 'button',
+                            text: (i + 6) + ":00"
+                        }]
+                    })
+                }
+                return hoursArr
+            })()
         })
 
         me.topPanel = Ext.create({
             xtype: 'panel',
-            title: 'top',
             layout: {
                 type: 'hbox',
                 align: 'stretch'
             },
-            flex: 100,
-            items: []
+            flex: 50,
+            minHeight: 50,
+            items: (function () {
+                var i
+                var hoursArr = []
+                var mapTyg = ['Godzina/Dzień', 'Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sb', 'Nd']
+
+                for (i = 0; i < 8; i++) {
+                    hoursArr.push({
+                        xtype: 'panel',
+                        titleAlign: 'center',
+                        width: 150,
+                        title: mapTyg[i]
+                    })
+                }
+                return hoursArr
+            })()
         })
 
         me.centerPanel = Ext.create({
             xtype: 'panel',
-            title: 'center',
             layout: {
                 type: 'vbox',
                 align: 'stretch'
             },
-            flex: 100,
-            items: []
+            flex: 20,
+            items: (function () {
+                var i
+                var hoursArr = []
+
+                for (i = 0; i < 14; i++) {
+                    hoursArr.push({
+                        xtype: 'panel',
+                        layout: {
+                            type: 'hbox',
+                            align: 'stretch'
+                        },
+                        width: 50,
+                        height: 100,
+                        items: (function () {
+                            var days = []
+                            var j
+
+                            for (j = 1; j < 8; j++) {
+                                days.push({
+                                    xtype: 'panel',
+                                    border: false,
+                                    frame: false,
+                                    layout: 'fit',
+                                    items: [{
+                                        xtype: 'button',
+                                        style: {
+                                            'background-color': '#1E2525'
+                                        },
+                                        text: j,
+                                        width: 150
+                                    }]
+                                })
+                            }
+
+                            return days
+                        })()
+                    })
+                }
+                return hoursArr
+            })()
         })
 
         me.items = [me.topPanel, {
             xtype: 'panel',
+            scrollable: true,
             layout: {
                 type: 'hbox',
                 align: 'stretch'
             },
-            flex: 100,
             items: [me.leftPanel, me.centerPanel]
         }]
 

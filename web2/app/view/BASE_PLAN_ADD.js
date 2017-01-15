@@ -17,6 +17,7 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                 PLAN_DODNAU: ['id', 'name', 'name', 'login'], // TODO
                 PLAN_DODZAJ: ['id', 'building', 'number'], // TODO
                 PLAN_LISUZY: ['id', 'name', 'name', 'login'],
+                PLAN_DODPLAN: ['id', 'name', 'name', 'login'],
             }[me.getXType()],
             proxy: {
                 type: 'ajax',
@@ -31,6 +32,7 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                     PLAN_DODNAU: '/user/list', // TODO
                     PLAN_DODZAJ: '/room/list',
                     PLAN_LISUZY: '/user/list',
+                    PLAN_DODPLAN: '/event/list'
                 }[me.getXType()],
                 reader: {
                     type: 'json',
@@ -52,7 +54,8 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                 PLAN_DODGRU: _('Lista grup'),
                 PLAN_DODNAU: _('Lista nauczycieli'),
                 PLAN_DODZAJ: _('Lista zajęć'),
-                PLAN_LISUZY: _('Lista użytkowników')
+                PLAN_LISUZY: _('Lista użytkowników'),
+                PLAN_DODPLAN: _('Lista zdarzeń')
             }[me.getXType()],
             flex: 100,
             columns: [].concat({
@@ -67,7 +70,7 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                     editor: {
                         xtype: 'textfield'
                     }
-                }], // TODO
+                }],
                 PLAN_DODNAU: [], // TODO
                 PLAN_DODZAJ: [{
                     text: _('Lp'),
@@ -87,7 +90,8 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                     editor: {
                         xtype: 'textfield'
                     }
-                }], // TODO
+                }],
+                PLAN_DODPLAN: [],
                 PLAN_LISUZY: [{
                     text: _('Lp'),
                     xtype: 'rownumberer',
@@ -123,7 +127,7 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                     xtype: 'button',
                     iconCls: 'fa fa-plus',
                     handler: function () {
-                        me.listaUzytkownikowGrid.getStore().add({
+                        me.listaGrid.getStore().add({
                             name: '',
                             login: ''
                         })
@@ -132,9 +136,9 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                     xtype: 'button',
                     iconCls: 'fa fa-minus',
                     handler: function () {
-                        var selRec = me.listaUzytkownikowGrid.getSelection()[0]
+                        var selRec = me.listaGrid.getSelection()[0]
 
-                        me.listaUzytkownikowGrid.getStore().remove(selRec)
+                        me.listaGrid.getStore().remove(selRec)
 
                     }
                 }, {
@@ -146,16 +150,35 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                         PLAN_DODGRU: _('Zarządzanie grupami'),
                         PLAN_DODNAU: _('Zarządzanie nauczycielami'),
                         PLAN_DODZAJ: _('Zarządzanie zajęciami'),
-                        PLAN_LISUZY: _('Zarządzanie użytkownikami')
+                        PLAN_LISUZY: _('Zarządzanie użytkownikami'),
+                        PLAN_DODPLAN: _('Zarządzanie planem'),
                     }[me.getXType()]
                 }, {
                     xtype: 'button',
                     iconCls: 'fa fa-floppy-o',
                     text: _('Zapisz'),
                     handler: function () {
-                        var storeData = PLAN.utils.Helpers.cleanStoreData(me.listaUzytkownikowGrid.getStore().getData())
+                        var storeData = PLAN.utils.Helpers.cleanStoreData(me.listaGrid.getStore().getData())
+                        console.log(storeData[0])
 
-                        console.log(storeData)
+                        $.ajax({
+                            url: PLAN.utils.Ajax.apiPath + '/user/save', 
+                            headers: {
+                                'Access-Control-Allow-Origin': "*",
+                                'Access-Control-Request-Method': 'POST',
+                                'Access-Control-Request-Headers': 'Content-Type',
+                                'Content-Type': 'application/json'
+                            },
+                            type: "POST",
+                            dataType: 'json',
+                            data: JSON.stringify(storeData[0]),
+                            success: function (data, textStatus, jqXHR) {
+                                //data - response from server
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+
+                            }
+                        });
                     }
                 }]
             }]

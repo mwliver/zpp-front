@@ -38,6 +38,13 @@ Ext.define("PLAN.model.MenuTreeStore", {
                         iconCls: "fa fa-plus-circle",
                         leaf: true
                     }, {
+                        text: "Dodawanie zdarzeń",
+                        config: {
+                            type: 'dodZda'
+                        },
+                        iconCls: "fa fa-file-o",
+                        leaf: true
+                    }, {
                         text: "Dodawanie zajęć",
                         config: {
                             type: 'dodZaj'

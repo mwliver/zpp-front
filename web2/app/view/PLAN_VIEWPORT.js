@@ -43,6 +43,12 @@ Ext.define("PLAN.view.PLAN_VIEWPORT", {
                         contextForm: true
                     })
                     break
+                case 'dodZda':
+                    PLAN.utils.Router.open({
+                        formName: "PLAN_DODPLAN",
+                        contextForm: true
+                    })
+                    break
                 case 'dodNau':
                     PLAN.utils.Router.open({
                         formName: "PLAN_DODNAU",
