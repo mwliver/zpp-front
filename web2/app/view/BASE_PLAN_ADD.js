@@ -17,16 +17,12 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                 PLAN_DODNAU: ['id', 'name', 'name', 'login'], // TODO
                 PLAN_DODZAJ: ['id', 'building', 'number'], // TODO
                 PLAN_LISUZY: ['id', 'name', 'name', 'login'],
-                PLAN_DODPLAN: ['id', 'name', 'name', 'login'],
+                PLAN_DODPLAN: ['id', 'timeFrom', 'timeTo'],
             }[me.getXType()],
             proxy: {
                 type: 'ajax',
-                useDefaultXhrHeader: false,
                 cors: true,
-                // headers: {
-                //     'Access-Control-Request-Headers': '*',
-                //     'Access-Control-Allow-Origin': "*"
-                // },
+                useDefaultXhrHeader: false,
                 url: PLAN.utils.Ajax.apiPath + {
                     PLAN_DODGRU: '/team/list',
                     PLAN_DODNAU: '/user/list', // TODO
@@ -91,29 +87,57 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                         xtype: 'textfield'
                     }
                 }],
-                PLAN_DODPLAN: [],
+                PLAN_DODPLAN: [{
+                    text: _('Lp'),
+                    xtype: 'rownumberer',
+                    width: 60
+                }, {
+                    xtype: "datecolumn",
+                    format: 'Y-m-d',
+                    text: _('Data od'),
+                    flex: 2,
+                    dataIndex: 'timeFrom',
+                    editor: {
+                        xtype: 'datefield'
+                    },
+                    renderer: function (self, value) {
+                        return Ext.Date.parse(new Date(value), 'Y-m-d')
+                    }
+                }, {
+                    xtype: "datecolumn",
+                    format: 'Y-m-d',
+                    text: _('Data do'),
+                    flex: 2,
+                    dataIndex: 'timeTo',
+                    editor: {
+                        xtype: 'datefield'
+                    },
+                    renderer: function (self, value) {
+                        return Ext.Date.parse(new Date(value), 'Y-m-d')
+                    }
+                }],
                 PLAN_LISUZY: [{
                     text: _('Lp'),
                     xtype: 'rownumberer',
                     width: 60
                 }, {
-                    text: _('Imię'),
-                    flex: 2,
-                    dataIndex: 'name',
-                    editor: {
-                        xtype: 'textfield'
-                    }
-                }, {
-                    text: _('Nazwisko'),
-                    flex: 2,
-                    dataIndex: 'surname', // TODO w bazie
-                    editor: {
-                        xtype: 'textfield'
-                    }
-                }, {
                     text: _('Login'),
                     flex: 2,
                     dataIndex: 'login',
+                    editor: {
+                        xtype: 'textfield'
+                    }
+                }, {
+                    text: _('Nazwa'),
+                    flex: 2,
+                    dataIndex: 'name', // TODO w bazie
+                    editor: {
+                        xtype: 'textfield'
+                    }
+                }, {
+                    text: _('Hasło'),
+                    flex: 2,
+                    dataIndex: 'password',
                     editor: {
                         xtype: 'textfield'
                     }
@@ -128,9 +152,26 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                     iconCls: 'fa fa-plus',
                     handler: function () {
                         me.listaGrid.getStore().add({
+                        PLAN_DODGRU: {
+                            name: ''
+                        },
+                        PLAN_DODNAU: {
+                            name: ''
+                        },
+                        PLAN_DODZAJ: {
+                            building: '',
+                            number: ''
+                        },
+                        PLAN_LISUZY: {
+                            login: '',
                             name: '',
-                            login: ''
-                        })
+                            password: ''
+                        },
+                        PLAN_DODPLAN: {
+                            timeFrom: '',
+                            timeTo: ''
+                        },
+                    }[me.getXType()])
                     }
                 }, {
                     xtype: 'button',
@@ -159,10 +200,21 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                     text: _('Zapisz'),
                     handler: function () {
                         var storeData = PLAN.utils.Helpers.cleanStoreData(me.listaGrid.getStore().getData())
-                        console.log(storeData[0])
+
+                        for (var i = 0; i < storeData.length; i++) {
+                            if (Ext.isString(storeData[i].id) && storeData[i].id.match(/ext/)) {
+                                storeData[i].id = Math.floor((Math.random() * 100) + 1)
+                            }
+                        }
 
                         $.ajax({
-                            url: PLAN.utils.Ajax.apiPath + '/user/save', 
+                            url: PLAN.utils.Ajax.apiPath + {
+                                PLAN_DODGRU: '/team/list/save',
+                                PLAN_DODNAU: '/user/list/save',
+                                PLAN_DODZAJ: '/room/list/save',
+                                PLAN_LISUZY: '/user/list/save',
+                                PLAN_DODPLAN: '/event/list/save'
+                            }[me.getXType()],
                             headers: {
                                 'Access-Control-Allow-Origin': "*",
                                 'Access-Control-Request-Method': 'POST',
@@ -171,12 +223,13 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                             },
                             type: "POST",
                             dataType: 'json',
-                            data: JSON.stringify(storeData[0]),
+                            data: JSON.stringify(storeData),
                             success: function (data, textStatus, jqXHR) {
-                                //data - response from server
+
+                                me.listaGrid.getStore().reload()
                             },
                             error: function (jqXHR, textStatus, errorThrown) {
-
+                                me.listaGrid.getStore().reload()
                             }
                         });
                     }
