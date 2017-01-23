@@ -30,14 +30,14 @@ Ext.define("PLAN.model.MenuTreeStore", {
                 }, {
                     text: "Admin",
                     iconCls: "fa fa-book",
-                    children: [{
+                    children: [/*{
                         text: "Dodawanie nauczyciela",
                         config: {
                             type: 'dodNau'
                         },
                         iconCls: "fa fa-plus-circle",
                         leaf: true
-                    }, {
+                    }, */{
                         text: "Dodawanie zdarzeń",
                         config: {
                             type: 'dodZda'

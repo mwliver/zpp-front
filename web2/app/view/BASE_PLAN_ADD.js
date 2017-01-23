@@ -152,34 +152,67 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                     iconCls: 'fa fa-plus',
                     handler: function () {
                         me.listaGrid.getStore().add({
-                        PLAN_DODGRU: {
-                            name: ''
-                        },
-                        PLAN_DODNAU: {
-                            name: ''
-                        },
-                        PLAN_DODZAJ: {
-                            building: '',
-                            number: ''
-                        },
-                        PLAN_LISUZY: {
-                            login: '',
-                            name: '',
-                            password: ''
-                        },
-                        PLAN_DODPLAN: {
-                            timeFrom: '',
-                            timeTo: ''
-                        },
-                    }[me.getXType()])
+                            PLAN_DODGRU: {
+                                name: ''
+                            },
+                            PLAN_DODNAU: {
+                                name: ''
+                            },
+                            PLAN_DODZAJ: {
+                                building: '',
+                                number: ''
+                            },
+                            PLAN_LISUZY: {
+                                login: '',
+                                name: '',
+                                password: ''
+                            },
+                            PLAN_DODPLAN: {
+                                timeFrom: '',
+                                timeTo: ''
+                            },
+                        }[me.getXType()])
                     }
                 }, {
                     xtype: 'button',
                     iconCls: 'fa fa-minus',
                     handler: function () {
-                        var selRec = me.listaGrid.getSelection()[0]
+                        var id = me.listaGrid.getSelection()[0].data.id
 
-                        me.listaGrid.getStore().remove(selRec)
+                        Ext.Msg.show({
+                            title: 'Komunikat',
+                            message: 'Czy napewno chcesz usunąć zaznaczony rekord ??',
+                            buttons: Ext.Msg.YESNO,
+                            icon: Ext.Msg.QUESTION,
+                            fn: function (btn) {
+                                if (btn === 'yes') {
+                                    $.ajax({
+                                        url: PLAN.utils.Ajax.apiPath + {
+                                            PLAN_DODGRU: '/team/remove',
+                                            PLAN_DODZAJ: '/room/remove',
+                                            PLAN_LISUZY: '/user/remove',
+                                            PLAN_DODPLAN: '/event/remove'
+                                        }[me.getXType()],
+                                        contentType: "application/x-www-form-urlencoded",
+                                        type: "POST",
+                                        data: {
+                                            PLAN_DODGRU: 'teamId',
+                                            PLAN_DODZAJ: 'roomId',
+                                            PLAN_LISUZY: 'userId',
+                                            PLAN_DODPLAN: 'eventId'
+                                        }[me.getXType()] + '=' + id,
+                                        success: function (data, textStatus, jqXHR) {
+
+                                            me.listaGrid.getStore().reload()
+                                        },
+                                        error: function (jqXHR, textStatus, errorThrown) {
+                                            me.listaGrid.getStore().reload()
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                        me.listaGrid.getStore().remove(me.listaGrid.getSelection()[0])
 
                     }
                 }, {
