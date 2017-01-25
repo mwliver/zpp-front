@@ -149,3 +149,8 @@
 .PLAN-cursor-pointer {
     cursor: pointer;
 }
+
+.PLAN-header .x-panel-header-default {
+    background-color: transparent;
+    color: red
+}

@@ -67,7 +67,6 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                         xtype: 'textfield'
                     }
                 }],
-                PLAN_DODNAU: [], // TODO
                 PLAN_DODZAJ: [{
                     text: _('Lp'),
                     xtype: 'rownumberer',
@@ -92,6 +91,73 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                     xtype: 'rownumberer',
                     width: 60
                 }, {
+                    text: 'Grupa',
+                    dataIndex: 'team',
+                    editor: {
+                        xtype: 'combobox',
+                        valueField: 'name',
+                        displayField: 'name',
+                        store: Ext.create("Ext.data.Store", {
+                            autoLoad: true,
+                            fields: ['id', 'name'],
+                            proxy: {
+                                type: 'ajax',
+                                cors: true,
+                                useDefaultXhrHeader: false,
+                                url: PLAN.utils.Ajax.apiPath + '/team/list',
+                                reader: {
+                                    type: 'json',
+                                    rootProperty: 'id'
+                                }
+                            },
+                        })
+                    }
+                }, {
+                    text: 'Pokój',
+                    dataIndex: 'room',
+                    editor: {
+                        xtype: 'combobox',
+                        valueField: 'building',
+                        displayField: 'building',
+                        store: Ext.create("Ext.data.Store", {
+                            autoLoad: true,
+                            fields: ['id', 'building', 'number'],
+                            proxy: {
+                                type: 'ajax',
+                                cors: true,
+                                useDefaultXhrHeader: false,
+                                url: PLAN.utils.Ajax.apiPath + '/room/list',
+                                reader: {
+                                    type: 'json',
+                                    rootProperty: 'id'
+                                }
+                            },
+                        })
+                    }
+                }, {
+                    text: 'Nauczyciel',
+                    dataIndex: 'user',
+                    flex: 2,
+                    editor: {
+                        xtype: 'combobox',
+                        valueField: 'name',
+                        displayField: 'name',
+                        store: Ext.create("Ext.data.Store", {
+                            autoLoad: true,
+                            fields: ['id', 'name', 'name', 'login'],
+                            proxy: {
+                                type: 'ajax',
+                                cors: true,
+                                useDefaultXhrHeader: false,
+                                url: PLAN.utils.Ajax.apiPath + '/user/list',
+                                reader: {
+                                    type: 'json',
+                                    rootProperty: 'id'
+                                }
+                            },
+                        })
+                    }
+                }, {
                     xtype: "datecolumn",
                     format: 'Y-m-d',
                     text: _('Data od'),
@@ -100,7 +166,8 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                     editor: {
                         xtype: 'datefield'
                     },
-                    renderer: function (self, value) {
+                    render: function (self, value) {
+                        console.log(value)
                         return Ext.Date.parse(new Date(value), 'Y-m-d')
                     }
                 }, {
@@ -112,7 +179,7 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                     editor: {
                         xtype: 'datefield'
                     },
-                    renderer: function (self, value) {
+                    render: function (self, value) {
                         return Ext.Date.parse(new Date(value), 'Y-m-d')
                     }
                 }],
@@ -153,9 +220,6 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                     handler: function () {
                         me.listaGrid.getStore().add({
                             PLAN_DODGRU: {
-                                name: ''
-                            },
-                            PLAN_DODNAU: {
                                 name: ''
                             },
                             PLAN_DODZAJ: {
@@ -239,7 +303,7 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                                 storeData[i].id = Math.floor((Math.random() * 100) + 1)
                             }
                         }
-
+                        console.log(storeData)
                         $.ajax({
                             url: PLAN.utils.Ajax.apiPath + {
                                 PLAN_DODGRU: '/team/list/save',

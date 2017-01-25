@@ -7,119 +7,175 @@ Ext.define("PLAN.view.PLAN_PLAN", {
     },
     flex: 100,
     scrollable: true,
+    viewModel: {},
     initComponent: function () {
         var me = this
+        var viewModel = me.getViewModel()
 
-        me.leftPanel = Ext.create({
-            xtype: 'panel',
-            layout: {
-                type: 'vbox',
-                align: 'stretch'
-            },
-            scrollable: true,
-            width: 150,
-            items: (function () {
-                var i
-                var hoursArr = []
+        _createCalender = function (events) {
+            var daysName = ['Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sb', 'Nd']
+            var monthDays = ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień',
+                'Październik', 'Listopad', 'Grudzień']
 
-                for (i = 1; i < 15; i++) {
-                    hoursArr.push({
-                        xtype: 'panel',
-                        layout: 'fit',
-                        width: 50,
-                        height: 100,
-                        items: [{
-                            xtype: 'button',
-                            text: (i + 6) + ":00"
-                        }]
-                    })
-                }
-                return hoursArr
-            })()
-        })
+            var firstDayInSelectedMonth = new Date(viewModel.get('data').getFullYear(), viewModel.get('data').getMonth(), 1)
+            var startDay = firstDayInSelectedMonth.getDay()
+            var dayInMonthCount = new Date(viewModel.get('data').getFullYear(), viewModel.get('data').getMonth() + 1, 0).getDate()
 
-        me.topPanel = Ext.create({
-            xtype: 'panel',
-            layout: {
-                type: 'hbox',
-                align: 'stretch'
-            },
-            flex: 50,
-            minHeight: 50,
-            items: (function () {
-                var i
-                var hoursArr = []
-                var mapTyg = ['Godzina/Dzień', 'Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sb', 'Nd']
+            me.headerMonthPanel.setTitle(monthDays[viewModel.get('data').getMonth()])
 
-                for (i = 0; i < 8; i++) {
-                    hoursArr.push({
-                        xtype: 'panel',
-                        titleAlign: 'center',
-                        width: 150,
-                        title: mapTyg[i]
-                    })
-                }
-                return hoursArr
-            })()
-        })
+            me.weekDayPanel.removeAll()
+            var weekDaysCmp = []
 
-        me.centerPanel = Ext.create({
-            xtype: 'panel',
-            layout: {
-                type: 'vbox',
-                align: 'stretch'
-            },
-            flex: 20,
-            items: (function () {
-                var i
-                var hoursArr = []
+            for (var i = 0; i < daysName.length; i++) {
 
-                for (i = 0; i < 14; i++) {
-                    hoursArr.push({
+                me.weekDayPanel.insert({
+                    xtype: 'panel', border: false,
+                    titleAlign: 'center',
+                    title: daysName[i],
+                    width: 150
+                })
+            }
+
+            var dayCmp
+            var weekPanel = null
+            var day = 1
+
+            me.conentPanel.removeAll()
+
+            for (var c = 0; c < 6; c++) {
+                weekPanel = Ext.create({
+                    xtype: 'panel', border: false,
+                    flex: 100,
+                    layout: {
+                        type: 'hbox',
+                        align: 'stretch'
+                    },
+                    items: []
+                })
+                for (var cc = 0; cc <= 6; cc++) {
+                    dayCmp = {
                         xtype: 'panel',
                         layout: {
-                            type: 'hbox',
+                            type: 'vbox',
                             align: 'stretch'
                         },
-                        width: 50,
-                        height: 100,
-                        items: (function () {
-                            var days = []
-                            var j
+                        disabled: true,
+                        width: 150,
+                        height: 150
+                    }
+                    if (day <= dayInMonthCount && (c > 0 || cc >= startDay)) {
+                        dayCmp.disabled = false
+                        dayCmp.items = [{
+                            xtype: 'label',
+                            text: day
+                        }]
+                        if (events) {
+                            for (var d = 0; d < events.length; d++) {
+                                if (events[d].timeFrom && events[d].timeTo) {
+                                    var timeFromZero = new Date(events[d].timeFrom).setHours(0, 0, 0, 0)
+                                    var dateZero = firstDayInSelectedMonth.setHours(0, 0, 0, 0)
+                                    var timeToZero = new Date(events[d].timeTo).setHours(0, 0, 0, 0)
 
-                            for (j = 1; j < 8; j++) {
-                                days.push({
-                                    xtype: 'panel',
-                                    border: false,
-                                    frame: false,
-                                    layout: 'fit',
-                                    items: [{
-                                        xtype: 'button',
-                                        style: {
-                                            'background-color': '#1E2525'
-                                        },
-                                        text: j,
-                                        width: 150
-                                    }]
-                                })
+                                        console.log(timeFromZero, dateZero, timeToZero)
+                                    if (timeFromZero <= dateZero && dateZero <= timeToZero) {
+                                        debugger
+                                        dayCmp.items.push({
+                                            xtype: 'label',
+                                            text: "EVENT",
+                                            valueObj: events[d]
+                                        })
+                                    }
+                                }
                             }
+                        }
 
-                            return days
-                        })()
-                    })
+                        day++
+                    }
+                    weekPanel.insert(dayCmp)
+
+                    if (day > dayInMonthCount) {
+                        me.conentPanel.insert(weekPanel)
+                        return;
+                    }
                 }
-                return hoursArr
-            })()
+                me.conentPanel.insert(weekPanel)
+            }
+        }
+
+        me.navPanel = Ext.create({
+            xtype: 'toolbar',
+            items: [{
+                xtype: 'panel', border: false,
+                frame: false,
+                border: false,
+                layout: 'vbox',
+                items: [{
+                    xtype: 'datefield',
+                    fieldLabel: 'Data',
+                    bind: '{data}'
+                }]
+            }, {
+                xtype: 'button',
+                text: _('Generuj plan'),
+                iconCls: 'fa fa-cog',
+                handler: function () {
+                    Ext.Ajax.request({
+                        url: PLAN.utils.Ajax.apiPath + '/event/list',
+                        method: 'GET',
+                        success: function (response, opts) {
+                            var res = Ext.decode(response.responseText);
+                            var eventsArr = []
+
+                            if (res && res.length) {
+                                for (var i = 0; i < res.length; i++) {
+                                    eventsArr.push(res[i])
+                                }
+
+                            }
+                            _createCalender(eventsArr)
+                        },
+
+                        failure: function (response, opts) {
+                            console.log('server-side failure with status code ' + response.status);
+                        }
+                    })
+                    _createCalender()
+                }
+            }]
         })
 
-        me.items = [me.topPanel, {
+        me.headerMonthPanel = Ext.create({
             xtype: 'panel',
-            scrollable: true,
+            border: false,
+            titleAlign: 'center',
+            width: 1050
+        })
+
+        me.weekDayPanel = Ext.create({
+            xtype: 'panel', border: false,
             layout: {
                 type: 'hbox',
                 align: 'stretch'
             },
-            items: [me.leftPanel, me.centerPanel]
+            items: []
+        })
+
+        me.conentPanel = Ext.create({
+            xtype: 'panel', border: false,
+            layout: {
+                type: 'vbox',
+                align: 'stretch'
+            },
+            items: []
+        })
+
+        me.items = [{
+            xtype: 'panel', border: false,
+            layout: {
+                type: 'vbox',
+                align: 'stretch'
+            },
+            items: [me.navPanel/*, me.headerMonthPanel*/, me.weekDayPanel, me.conentPanel]
         }]
 
         me.callParent(arguments)
