@@ -7,8 +7,12 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
     },
     cls: "PLAN-menu-item-panel",
     flex: 100,
+    viewModel: {},
     initComponent: function () {
         var me = this;
+        var viewModel = me.getViewModel()
+
+        viewModel.set('tmpData', {})
 
         me.listaStore = Ext.create("Ext.data.Store", {
             autoLoad: true,
@@ -110,8 +114,22 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                                     rootProperty: 'id'
                                 }
                             },
-                        })
-                    }
+                        }),
+                        listeners: {
+                            select: function (combo, record) {
+                                var teamTmp = {}
+
+                                teamTmp.id = record.data.id
+                                teamTmp.name = record.data.name
+                                viewModel.set('tmpData.teamTmp', teamTmp)
+                                // TODO ogarnać to reerencją do konkretnych wierszy
+
+                            }
+                        }
+                    },
+                    renderer: function (value, meta, rec) {
+                        return Ext.isObject(value) ? value.name : value
+                    },
                 }, {
                     text: 'Pokój',
                     dataIndex: 'room',
@@ -132,8 +150,21 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                                     rootProperty: 'id'
                                 }
                             },
-                        })
-                    }
+                        }),
+                        listeners: {
+                            select: function (combo, record) {
+                                var roomTmp = {}
+
+                                roomTmp.id = record.data.id
+                                roomTmp.building = record.data.building
+                                roomTmp.number = record.data.number
+                                viewModel.set('tmpData.roomTmp', roomTmp)
+                            }
+                        }
+                    },
+                    renderer: function (value) {
+                        return Ext.isObject(value) ? value.building : value
+                    },
                 }, {
                     text: 'Nauczyciel',
                     dataIndex: 'user',
@@ -155,8 +186,22 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                                     rootProperty: 'id'
                                 }
                             },
-                        })
-                    }
+                        }),
+                        listeners: {
+                            select: function (combo, record) {
+                                var userTmp = {}
+
+                                userTmp.id = record.data.id
+                                userTmp.login = record.data.login
+                                userTmp.name = record.data.name
+                                userTmp.password = record.data.password
+                                viewModel.set('tmpData.userTmp', userTmp)
+                            }
+                        },
+                    },
+                    renderer: function (value) {
+                        return Ext.isObject(value) ? value.name : value
+                    },
                 }, {
                     xtype: "datecolumn",
                     format: 'Y-m-d',
@@ -166,9 +211,8 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                     editor: {
                         xtype: 'datefield'
                     },
-                    render: function (self, value) {
-                        console.log(value)
-                        return Ext.Date.parse(new Date(value), 'Y-m-d')
+                    renderer: function (value) {
+                        return new Date(value).toLocaleString()
                     }
                 }, {
                     xtype: "datecolumn",
@@ -179,8 +223,8 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                     editor: {
                         xtype: 'datefield'
                     },
-                    render: function (self, value) {
-                        return Ext.Date.parse(new Date(value), 'Y-m-d')
+                    renderer: function (value) {
+                        return new Date(value).toLocaleString()
                     }
                 }],
                 PLAN_LISUZY: [{
@@ -297,13 +341,16 @@ Ext.define("PLAN.view.BASE_PLAN_ADD", {
                     text: _('Zapisz'),
                     handler: function () {
                         var storeData = PLAN.utils.Helpers.cleanStoreData(me.listaGrid.getStore().getData())
-
+                        
                         for (var i = 0; i < storeData.length; i++) {
                             if (Ext.isString(storeData[i].id) && storeData[i].id.match(/ext/)) {
                                 storeData[i].id = Math.floor((Math.random() * 100) + 1)
+                                storeData[i].team = viewModel.get('tmpData.teamTmp')
+                                storeData[i].user = viewModel.get('tmpData.userTmp')
+                                storeData[i].room = viewModel.get('tmpData.roomTmp')
                             }
                         }
-                        console.log(storeData)
+                        
                         $.ajax({
                             url: PLAN.utils.Ajax.apiPath + {
                                 PLAN_DODGRU: '/team/list/save',

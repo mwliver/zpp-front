@@ -64,24 +64,34 @@ Ext.define("PLAN.view.PLAN_PLAN", {
                         height: 150
                     }
                     if (day <= dayInMonthCount && (c > 0 || cc >= startDay)) {
+                        var date = new Date(viewModel.get('data').getFullYear(), viewModel.get('data').getMonth(), day)
+                        var cls = 'PLAN-days'
+
+                        switch (daysName[date.getDay()]) {
+                            case 'Sb':
+                            case 'Nd':
+                                cls = 'PLAN-weekend'
+                                break
+                        }
                         dayCmp.disabled = false
                         dayCmp.items = [{
                             xtype: 'label',
+                            margin: '10 10 10 10',
+                            cls: cls,
+                            date: date,
                             text: day
                         }]
                         if (events) {
                             for (var d = 0; d < events.length; d++) {
                                 if (events[d].timeFrom && events[d].timeTo) {
-                                    var timeFromZero = new Date(events[d].timeFrom).setHours(0, 0, 0, 0)
-                                    var dateZero = firstDayInSelectedMonth.setHours(0, 0, 0, 0)
-                                    var timeToZero = new Date(events[d].timeTo).setHours(0, 0, 0, 0)
+                                    var timeFromZero = new Date(events[d].timeFrom).getTime()
+                                    var timeToZero = new Date(events[d].timeTo).getTime()
 
-                                        console.log(timeFromZero, dateZero, timeToZero)
-                                    if (timeFromZero <= dateZero && dateZero <= timeToZero) {
-                                        debugger
+                                    if (timeFromZero <= date && date <= timeToZero) {
                                         dayCmp.items.push({
                                             xtype: 'label',
-                                            text: "EVENT",
+                                            cls: 'PLAN-event',
+                                            text: events[d].room.building + ' ' + events[d].room.number,
                                             valueObj: events[d]
                                         })
                                     }

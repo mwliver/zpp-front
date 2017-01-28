@@ -154,3 +154,23 @@
     background-color: transparent;
     color: red
 }
+
+.PLAN-days {
+    color: grey;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10 10 10 10
+}
+
+.PLAN-weekend {
+    color: red;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10 10 10 10
+}
+
+.PLAN-event {
+    color: white;
+    font-weight: bold;
+    background-color: coral
+}
